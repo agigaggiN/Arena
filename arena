@@ -1,0 +1,87 @@
+import random
+class valecnik:
+    def __init__(self,jmeno,HP,ATK,DEF,zbran):
+        self.jmeno = jmeno
+        self.HP = HP
+        self.ATK = ATK
+        self.DEF = DEF
+        self.zbran = zbran
+    
+    def zautoc(self, protivnik):
+        return self.ATK + self.zbran.atk - protivnik.DEF
+    
+    
+    def __str__(self):
+        return f"Jmeno: {self.jmeno}, HP: {self.HP}"
+ 
+    def set_HP(self,HP):
+        if HP < 0 :
+            self.HP = 0
+
+class Rytir(valecnik):
+        def __init__(self,jmeno,HP,ATK,DEF,zbran,brneni):
+            super().__init__(jmeno,HP,ATK,DEF,zbran)
+            self.brneni=brneni
+            self.HP += brneni
+            
+    
+class ultra_bojovnik(valecnik):
+        def __init__(self,jmeno,HP,ATK,DEF,zbran,superat):           
+            super().__init__(jmeno,HP,ATK,DEF,zbran)
+            self.superat=superat
+            sance = random.randint(1,2)
+            if sance == 2:
+                self.ATK += superat
+ 
+  
+
+
+class Zbran:
+    
+    def __init__(self, jmeno, atk):
+        self.jmeno = jmeno
+        self.atk = atk
+
+
+class Turnaj:
+    
+    def __init__(self):
+        self.seznam_rytiru = []
+    
+    def registrace(self, rytir):
+        self.seznam_rytiru.append(rytir)
+    
+    def duel(self):
+        r1 = random.choice(self.seznam_rytiru)
+        r2 = random.choice(self.seznam_rytiru)
+        while r1.HP >= 0 and r2.HP >= 0:
+            r2.HP -= r1.zautoc(r2)
+            r1.HP -= r2.zautoc(r1)
+        if r1.HP <= 0:
+            self.seznam_rytiru.remove(r1)
+        else:
+            self.seznam_rytiru.remove(r2)
+class zbytecne:
+    def __init__(self,jmeno,vek):
+        self.jmeno = jmeno 
+        self._vek = vek
+    
+    def __str__(self):
+        return f"Někdo strarý od nas ze školy {self.jmeno,self.vek}"
+    
+    @property
+    def vek(self):
+        if self.jmeno =="Kmet":
+            return "věk radši ne"
+
+p_r = zbytecne("Kmet",vek= 107)
+turnaj = Turnaj()
+dragon_slayer = Zbran("Dragonslayer",atk = 50)
+excalibur = Zbran("Excalibur", atk =30)
+guts = Rytir("Žižka", HP=200, ATK=30, DEF=10,brneni= 60, zbran=dragon_slayer)
+griffith = ultra_bojovnik("kapitan amerika", HP=180, ATK=25, DEF=25,superat = 40, zbran=excalibur)
+turnaj.registrace(guts)
+turnaj.registrace(griffith)
+turnaj.duel()
+print(turnaj.seznam_rytiru[0])
+print(p_r)
